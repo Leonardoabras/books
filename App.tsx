@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 
-import Home from '@/screens/Home';
+import { ThemeProvider } from 'styled-components/native';
+
+import theme from './src/config/styles/theme';
+import Login from '@/screens/Login';
 
 const App = () => {
   return (
-    <View>
-      <Home />
-    </View>
+    <ThemeProvider theme={theme}>
+      <Login />
+    </ThemeProvider>
   );
 };
 
