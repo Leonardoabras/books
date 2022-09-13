@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components/native';
 
 import { TextInputProps } from 'react-native';
 
+import Button from '@/components/Button';
+
 type InputLoginProps = TextInputProps & {
   title: string;
   showButton?: boolean;
@@ -16,11 +18,7 @@ const Input = ({ title, showButton, marginBottom, ...rest }: InputLoginProps) =>
         <StyledInputTitle>{title}</StyledInputTitle>
         <StyledTextInput {...rest} />
       </StyledInputView>
-      {showButton && (
-        <StyledLoginButton>
-          <StyledText>Entrar</StyledText>
-        </StyledLoginButton>
-      )}
+      {showButton && <Button title='Entrar' />}
     </StyledView>
   );
 };
