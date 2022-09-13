@@ -39,17 +39,20 @@ const StyledView = styled.View<{ marginBottom?: number }>`
 const StyledInputView = styled.View``;
 
 const StyledInputTitle = styled.Text`
-  color: ${({ theme }) => theme.colors.grayText};
   opacity: 0.5;
   font-size: 16px;
-  font-family: 'Heebo-Regular';
+
+  ${({ theme }) => css`
+    color: ${theme.colors.grayText};
+    font-family: ${theme.fonts.Heebo_Regular};
+  `}
 `;
 const StyledTextInput = styled.TextInput`
-  font-family: 'Heebo-Regular';
   font-size: 16px;
   margin-top: 5px;
   color: white;
   padding: 0;
+  font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
 `;
 
 const StyledLoginButton = styled.TouchableOpacity`
@@ -66,9 +69,12 @@ const StyledLoginButton = styled.TouchableOpacity`
 const StyledText = styled.Text`
   align-self: center;
   font-size: 16px;
-  font-family: 'Heebo-Bold';
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.primary};
+
+  ${({ theme }) => css`
+    color: ${theme.colors.primary};
+    font-family: ${theme.fonts.Heebo_Bold};
+  `}
 `;
 
 export default Input;

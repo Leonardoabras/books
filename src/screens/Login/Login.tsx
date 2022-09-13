@@ -4,24 +4,24 @@ import { ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 
 import backgroundImage from '@/assets/images/background.png';
-import LogoImage from '@/assets/images/logo.svg';
+import Logo from '@/assets/images/logo.svg';
 
-import InputLogin from '@/screens/Login/Input';
+import Input from '@/screens/Login/Input';
 
 const Login = () => {
   return (
     <StyledBackground source={backgroundImage}>
       <StyledContentLogo>
-        <LogoImage />
+        <Logo />
       </StyledContentLogo>
       <StyledView>
-        <InputLogin
+        <Input
           title='Email'
           marginBottom={16}
           keyboardType='email-address'
           placeholder='Digite o seu email'
         />
-        <InputLogin title='Password' showButton secureTextEntry placeholder='Digite a sua senha' />
+        <Input title='Password' showButton secureTextEntry placeholder='Digite a sua senha' />
       </StyledView>
     </StyledBackground>
   );
@@ -36,6 +36,7 @@ const StyledBackground = styled(ImageBackground)`
 
 const StyledContentLogo = styled.View`
   margin-bottom: 50px;
+  width: 100%;
 `;
 
 const StyledView = styled.View`
