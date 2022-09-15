@@ -3,11 +3,12 @@ import styled, { css } from 'styled-components/native';
 
 type ButtonProps = {
   title: string;
+  onPress?: () => void;
 };
 
-const Button = ({ title }: ButtonProps) => {
+const Button = ({ title, onPress }: ButtonProps) => {
   return (
-    <StyledLoginButton>
+    <StyledLoginButton onPress={onPress}>
       <StyledText>{title}</StyledText>
     </StyledLoginButton>
   );

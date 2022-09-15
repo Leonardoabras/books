@@ -9,16 +9,17 @@ type InputLoginProps = TextInputProps & {
   title: string;
   showButton?: boolean;
   marginBottom?: number;
+  onSubmit?: () => void;
 };
 
-const Input = ({ title, showButton, marginBottom, ...rest }: InputLoginProps) => {
+const Input = ({ title, showButton, marginBottom, onSubmit, ...rest }: InputLoginProps) => {
   return (
     <StyledView marginBottom={marginBottom}>
       <StyledInputView>
         <StyledInputTitle>{title}</StyledInputTitle>
         <StyledTextInput {...rest} />
       </StyledInputView>
-      {showButton && <Button title='Entrar' />}
+      {showButton && <Button title='Entrar' onPress={onSubmit} />}
     </StyledView>
   );
 };
