@@ -10,13 +10,22 @@ type InputLoginProps = TextInputProps & {
   showButton?: boolean;
   marginBottom?: number;
   onSubmit?: () => void;
+  textError?: string;
 };
 
-const Input = ({ title, showButton, marginBottom, onSubmit, ...rest }: InputLoginProps) => {
+const Input = ({
+  title,
+  showButton,
+  marginBottom,
+  onSubmit,
+  textError,
+  ...rest
+}: InputLoginProps) => {
   return (
     <StyledView marginBottom={marginBottom}>
       <StyledInputView>
         <StyledInputTitle>{title}</StyledInputTitle>
+        {!!textError && <StyledTextError>{textError}</StyledTextError>}
         <StyledTextInput {...rest} />
       </StyledInputView>
       {showButton && <Button title='Entrar' onPress={onSubmit} />}
@@ -35,6 +44,7 @@ const StyledView = styled.View<{ marginBottom?: number }>`
     background-color: ${theme.colors.inputBackground};
   `}
 `;
+
 const StyledInputView = styled.View``;
 
 const StyledInputTitle = styled.Text`
@@ -54,26 +64,10 @@ const StyledTextInput = styled.TextInput`
   font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
 `;
 
-const StyledLoginButton = styled.TouchableOpacity`
-  width: 85px;
-  height: 36px;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 20px;
-  border-radius: 44px;
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
-const StyledText = styled.Text`
-  align-self: center;
-  font-size: 16px;
-  font-weight: bold;
-
-  ${({ theme }) => css`
-    color: ${theme.colors.primary};
-    font-family: ${theme.fonts.Heebo_Bold};
-  `}
+const StyledTextError = styled.Text<{ textError?: boolean }>`
+  font-size: 14px;
+  color: ${({ textError }) => (textError ? '#808080' : '#ffff')};
+  font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
 `;
 
 export default Input;
