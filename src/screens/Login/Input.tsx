@@ -21,26 +21,32 @@ const Input = ({
   textError,
   ...rest
 }: InputLoginProps) => {
+  const marginWithError = !!textError && marginBottom ? marginBottom + 4 : marginBottom;
   return (
-    <StyledView marginBottom={marginBottom}>
-      <StyledInputView>
-        <StyledInputTitle>{title}</StyledInputTitle>
-        {!!textError && <StyledTextError>{textError}</StyledTextError>}
-        <StyledTextInput {...rest} />
-      </StyledInputView>
-      {showButton && <Button title='Entrar' onPress={onSubmit} />}
-    </StyledView>
+    <StyledContainer marginBottom={marginWithError}>
+      <StyledView>
+        <StyledInputView>
+          <StyledInputTitle>{title}</StyledInputTitle>
+          <StyledTextInput {...rest} />
+        </StyledInputView>
+        {showButton && <Button title='Entrar' onPress={onSubmit} />}
+      </StyledView>
+      {!!textError && <StyledTextError>{textError}</StyledTextError>}
+    </StyledContainer>
   );
 };
 
-const StyledView = styled.View<{ marginBottom?: number }>`
+const StyledContainer = styled.View<{ marginBottom?: number }>`
+  margin-bottom: ${({ marginBottom }) => marginBottom || 0}px;
+`;
+
+const StyledView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   padding: 8px 16px;
   border-radius: 4px;
 
-  ${({ theme, marginBottom }) => css`
-    margin-bottom: ${marginBottom || 0}px;
+  ${({ theme }) => css`
     background-color: ${theme.colors.inputBackground};
   `}
 `;
@@ -63,11 +69,14 @@ const StyledTextInput = styled.TextInput`
   padding: 0;
   font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
 `;
-
 const StyledTextError = styled.Text<{ textError?: boolean }>`
   font-size: 14px;
-  color: ${({ textError }) => (textError ? '#808080' : '#ffff')};
-  font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
+  margin-top: 4px;
+  ${({ theme }) => css`
+    color: ${theme.colors.white};
+    font-family: ${theme.fonts.Heebo_Bold};
+  `}
+  font-weight: bold;
 `;
 
 export default Input;

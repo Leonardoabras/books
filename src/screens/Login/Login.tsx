@@ -1,19 +1,30 @@
 import React from 'react';
 import { ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import { useForm, Controller } from 'react-hook-form';
+import styled from 'styled-components/native';
+
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import styled from 'styled-components/native';
+import { AppNavigationProp } from '@/routes/stacks/AppStack';
 
 import backgroundImage from '@/assets/images/background.png';
 import Header from '@/assets/images/header.svg';
 
 import Input from '@/screens/Login/Input';
+import api from '@/services/api';
+
+import { AppStackRoutes } from '@/config/constants/routenames';
+
+type AuthDataProps = {
+  email: string;
+  password: string;
+};
 
 const schema = yup.object().shape({
-  email: yup.string().email('Email Inválido').required('O e-mail é obrigatório'),
+  email: yup.string().email('Email Inválido').required('O campo e-mail é obrigatório'),
   password: yup.string().required('A senha é obrigatória')
 });
 
@@ -22,13 +33,26 @@ const Login = () => {
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm({
+  } = useForm<AuthDataProps>({
     resolver: yupResolver(schema)
   });
 
-  function handleSignIn(data: any) {
-    console.log(data);
+  const navigation = useNavigation<AppNavigationProp>();
+
+  async function handleSignIn(data: AuthDataProps) {
+    try {
+      const response = await api.post('/auth/sign-in', {
+        email: data.email,
+        password: data.password
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    navigation.navigate(AppStackRoutes.MainStack);
   }
+
+  console.log(errors?.password?.message);
 
   return (
     <StyledBackground source={backgroundImage}>
