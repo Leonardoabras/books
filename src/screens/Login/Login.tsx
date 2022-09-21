@@ -8,6 +8,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
+import { useReduxDispatch } from '@/hooks/useReduxDispatch';
+import { useReduxSelector } from '@/hooks/useReduxSelector';
+import { useDispatch } from 'react-redux';
+
 import { AppNavigationProp } from '@/routes/stacks/AppStack';
 
 import backgroundImage from '@/assets/images/background.png';
@@ -17,6 +21,7 @@ import Input from '@/screens/Login/Input';
 import api from '@/services/api';
 
 import { AppStackRoutes } from '@/config/constants/routenames';
+import { getToken } from '@/store/slices/userSlice';
 
 type AuthDataProps = {
   email: string;
@@ -37,9 +42,13 @@ const Login = () => {
     resolver: yupResolver(schema)
   });
 
-  const navigation = useNavigation<AppNavigationProp>();
+  const dispatch = useDispatch();
+  const { user } = useReduxSelector(state => state);
+
+  /*const navigation = useNavigation<AppNavigationProp>();*/
 
   async function handleSignIn(data: AuthDataProps) {
+    dispatch(getToken());
     try {
       const response = await api.post('/auth/sign-in', {
         email: data.email,
@@ -49,10 +58,10 @@ const Login = () => {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate(AppStackRoutes.MainStack);
+    /*navigation.navigate(AppStackRoutes.MainStack);*/
   }
 
-  console.log(errors?.password?.message);
+  console.log(user);
 
   return (
     <StyledBackground source={backgroundImage}>

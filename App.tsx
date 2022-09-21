@@ -1,15 +1,21 @@
 import React from 'react';
 import 'react-native-gesture-handler';
 import { ThemeProvider } from 'styled-components/native';
+import { Provider } from 'react-redux';
 
-import theme from './src/config/styles/theme';
+import store from '@/store';
+
+import theme from '@/config/styles/theme';
+
 import Routes from '@/routes/Routes';
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Routes />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <Routes />
+      </ThemeProvider>
+    </Provider>
   );
 };
 
