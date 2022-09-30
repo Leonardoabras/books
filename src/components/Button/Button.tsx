@@ -1,15 +1,20 @@
 import React from 'react';
 import styled, { css } from 'styled-components/native';
+import { ActivityIndicator } from 'react-native';
 
 type ButtonProps = {
   title: string;
   onPress?: () => void;
+  showLoading?: boolean;
 };
 
-const Button = ({ title, onPress }: ButtonProps) => {
+const Button = ({ title, onPress, showLoading }: ButtonProps) => {
   return (
     <StyledLoginButton onPress={onPress}>
       <StyledText>{title}</StyledText>
+      <StyledActivityIndicator>
+        {showLoading && <ActivityIndicator size='small' color='#AB2680' />}
+      </StyledActivityIndicator>
     </StyledLoginButton>
   );
 };
@@ -35,4 +40,6 @@ const StyledText = styled.Text`
     font-family: ${theme.fonts.Heebo_Bold};
   `}
 `;
+
+const StyledActivityIndicator = styled.View``;
 export default Button;

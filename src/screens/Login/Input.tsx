@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components/native';
 
 import { TextInputProps } from 'react-native';
+import { useReduxSelector } from '@/hooks/useReduxSelector';
 
 import Button from '@/components/Button';
 
@@ -22,6 +23,8 @@ const Input = ({
   ...rest
 }: InputLoginProps) => {
   const marginWithError = !!textError && marginBottom ? marginBottom + 4 : marginBottom;
+  const { user } = useReduxSelector(state => state);
+
   return (
     <StyledContainer marginBottom={marginWithError}>
       <StyledView>
@@ -29,7 +32,7 @@ const Input = ({
           <StyledInputTitle>{title}</StyledInputTitle>
           <StyledTextInput {...rest} />
         </StyledInputView>
-        {showButton && <Button title='Entrar' onPress={onSubmit} />}
+        {showButton && <Button title='Entrar' onPress={onSubmit} showLoading={user.isLoading} />}
       </StyledView>
       {!!textError && <StyledTextError>{textError}</StyledTextError>}
     </StyledContainer>
@@ -62,6 +65,7 @@ const StyledInputTitle = styled.Text`
     font-family: ${theme.fonts.Heebo_Regular};
   `}
 `;
+
 const StyledTextInput = styled.TextInput`
   font-size: 16px;
   margin-top: 5px;

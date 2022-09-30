@@ -1,5 +1,5 @@
-import React from 'react';
-import { ImageBackground } from 'react-native';
+import React, { useEffect } from 'react';
+import { ImageBackground, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import styled from 'styled-components/native';
@@ -8,20 +8,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { useReduxDispatch } from '@/hooks/useReduxDispatch';
 import { useReduxSelector } from '@/hooks/useReduxSelector';
 import { useDispatch } from 'react-redux';
-
-import { AppNavigationProp } from '@/routes/stacks/AppStack';
 
 import backgroundImage from '@/assets/images/background.png';
 import Header from '@/assets/images/header.svg';
 
 import Input from '@/screens/Login/Input';
-import api from '@/services/api';
 
-import { AppStackRoutes } from '@/config/constants/routenames';
-import { getToken } from '@/store/slices/userSlice';
+import { getToken, getUser, getTokenSuccess } from '@/store/slices/userSlice';
+import { AppNavigationProp } from '@/routes/stacks/AppStack';
 
 type AuthDataProps = {
   email: string;
@@ -45,23 +41,18 @@ const Login = () => {
   const dispatch = useDispatch();
   const { user } = useReduxSelector(state => state);
 
-  /*const navigation = useNavigation<AppNavigationProp>();*/
+  const navigation = useNavigation<AppNavigationProp>();
 
-  async function handleSignIn(data: AuthDataProps) {
-    dispatch(getToken());
-    try {
-      const response = await api.post('/auth/sign-in', {
-        email: data.email,
-        password: data.password
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-    /*navigation.navigate(AppStackRoutes.MainStack);*/
+  function handleSignIn(data: AuthDataProps) {
+    dispatch(getToken({ email: data.email, password: data.password }));
   }
 
-  console.log(user);
+  useEffect(() => {
+    console.log(user.loginError);
+    if (user.loginError) {
+      Alert.alert(user.loginError);
+    }
+  }, [user.loginError]);
 
   return (
     <StyledBackground source={backgroundImage}>

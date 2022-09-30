@@ -3,6 +3,7 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 
 import AuthStack from '@/routes/stacks/AuthStack';
 import MainStack from '@/routes/stacks/MainStack';
+import { useReduxSelector } from '@/hooks/useReduxSelector';
 
 import { AppStackRoutes } from '@/config/constants/routenames';
 
@@ -15,10 +16,15 @@ export type AppNavigationProp = StackNavigationProp<AppParamsList>;
 const Stack = createStackNavigator<AppParamsList>();
 
 const AppStack = () => {
+  const { user } = useReduxSelector(state => state);
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name={AppStackRoutes.AuthStack} component={AuthStack} />
-      <Stack.Screen name={AppStackRoutes.MainStack} component={MainStack} />
+      {user.token ? (
+        <Stack.Screen name={AppStackRoutes.AuthStack} component={AuthStack} />
+      ) : (
+        <Stack.Screen name={AppStackRoutes.MainStack} component={MainStack} />
+      )}
     </Stack.Navigator>
   );
 };

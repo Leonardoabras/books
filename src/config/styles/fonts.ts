@@ -10,4 +10,6 @@ const fonts = {
   Heebo_Thin: 'Heebo-Thin'
 };
 
+export type FontType = typeof fonts;
+
 export default fonts;

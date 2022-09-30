@@ -6,6 +6,10 @@ const COLORS = {
   inputBackground: 'rgba(0, 0, 0, 0.32)',
   boxShadow: 'rgba(84, 16, 95, 0.13)',
   grayText: '#999999',
-  homeBackground: '#E5E5E5'
+  homeBackground: '#E5E5E5',
+  boxSearchColor: '#333333'
 };
+
+export type ColorType = typeof COLORS;
+
 export default COLORS;
