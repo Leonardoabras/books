@@ -26,6 +26,7 @@
     "react-native-svg": "^13.1.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
+    "redux-saga": "^1.2.1",
     "styled-components": "^5.3.5",
     "yup": "^0.32.11"
   },
