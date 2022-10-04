@@ -1,39 +1,37 @@
 import React from 'react';
+
+import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 
 import Text from '@/components/Text';
+import { BookData } from '@/store/slices/bookSlice';
 
 type BookProps = {
-  data: {
-    imageUrl: string;
-    title: string;
-    author: string;
-    pageCount: number;
-    publisher: string;
-    published: number;
-  };
+  data: BookData;
 };
 
 const Book = ({
-  data: { imageUrl, title, author, pageCount, publisher, published }
+  data: { imageUrl, title, authors, pageCount, publisher, published }
 }: BookProps) => {
   return (
-    <StyledContainer>
-      <StyledImage source={{ uri: imageUrl }} />
-      <StyledBookView>
-        <StyledHeaderView>
-          <Text font='Heebo_Bold' size={14}>
-            {title}
-          </Text>
-          <Text color='primary'>{author}</Text>
-        </StyledHeaderView>
-        <StyledDescriptionView>
-          <StyledDescriptionText>{pageCount} páginas</StyledDescriptionText>
-          <StyledDescriptionText margin={4}>{publisher}</StyledDescriptionText>
-          <StyledDescriptionText>Publicado em {published}</StyledDescriptionText>
-        </StyledDescriptionView>
-      </StyledBookView>
-    </StyledContainer>
+    <TouchableOpacity>
+      <StyledContainer>
+        <StyledImage source={{ uri: imageUrl }} />
+        <StyledBookView>
+          <StyledHeaderView>
+            <Text font='Heebo_Bold' size={14}>
+              {title}
+            </Text>
+            <Text color='primary'>{authors}</Text>
+          </StyledHeaderView>
+          <StyledDescriptionView>
+            <StyledDescriptionText>{pageCount} páginas</StyledDescriptionText>
+            <StyledDescriptionText margin={4}>{publisher}</StyledDescriptionText>
+            <StyledDescriptionText>Publicado em {published}</StyledDescriptionText>
+          </StyledDescriptionView>
+        </StyledBookView>
+      </StyledContainer>
+    </TouchableOpacity>
   );
 };
 
@@ -66,5 +64,7 @@ const StyledDescriptionText = styled(Text).attrs({
 })<{ margin?: number }>`
   margin: ${({ margin }) => margin || 0}px 0;
 `;
+
+const StyledActivityIndicator = styled.View``;
 
 export default Book;

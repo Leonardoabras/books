@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ImageBackground, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import styled from 'styled-components/native';
 
@@ -16,8 +15,7 @@ import Header from '@/assets/images/header.svg';
 
 import Input from '@/screens/Login/Input';
 
-import { getToken, getUser, getTokenSuccess } from '@/store/slices/userSlice';
-import { AppNavigationProp } from '@/routes/stacks/AppStack';
+import { getToken } from '@/store/slices/userSlice';
 
 type AuthDataProps = {
   email: string;
@@ -40,8 +38,6 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const { user } = useReduxSelector(state => state);
-
-  const navigation = useNavigation<AppNavigationProp>();
 
   function handleSignIn(data: AuthDataProps) {
     dispatch(getToken({ email: data.email, password: data.password }));

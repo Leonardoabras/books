@@ -2,7 +2,7 @@ import { all, call, takeLatest, put } from 'redux-saga/effects';
 
 import { AxiosResponse } from 'axios';
 
-import api from '@/services/api';
+import api, { setTokenApi } from '@/services/api';
 import { getToken, getTokenSuccess, getLoginError } from '@/store/slices/userSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 
@@ -12,6 +12,8 @@ function* login(action: PayloadAction<{ email: string; password: string }>) {
       email: action.payload.email,
       password: action.payload.password
     });
+    setTokenApi(response.headers.authorization);
+
     yield put(getTokenSuccess({ token: response.headers.authorization }));
     console.log(response.headers.authorization);
   } catch (error) {

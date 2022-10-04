@@ -1,26 +1,44 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type DataBooks = {
-  id: string | null;
-  title: string | null;
-  authors: string | null;
-  pageCount: number | null;
-  publisher: string | null;
-  published: number | null;
-  imageUrl: string | null;
+export type BookData = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  authors: string[];
+  pageCount: number;
+  publisher: string;
+  published: number;
 };
 
-const initialState: DataBooks = {
-  id: null,
-  title: null,
-  authors: null,
-  pageCount: null,
-  publisher: null,
-  published: null,
-  imageUrl: null
+type InitialStateData = {
+  bookData: BookData[];
+  error: string | null;
+  isLoading: boolean;
 };
+
+const initialState: InitialStateData = {
+  bookData: [],
+  error: null,
+  isLoading: false
+};
+
 const bookSlice = createSlice({
   name: 'book',
   initialState,
-  reducers: {}
+  reducers: {
+    getBook: state => {
+      return { ...state, isLoading: true };
+    },
+    getBookSuccess: (state, action: PayloadAction<{ bookData: BookData[] }>) => {
+      return { ...state, bookData: action.payload.bookData, isLoading: false };
+    },
+    getError: (state, action: PayloadAction<{ error: string }>) => {
+      return { ...state, error: action.payload.error, isLoading: false };
+    }
+  }
 });
+
+const { actions, reducer } = bookSlice;
+export const { getBook, getBookSuccess, getError } = actions;
+
+export default reducer;

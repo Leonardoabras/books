@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { FlatList, FlatListProps } from 'react-native';
 import styled from 'styled-components/native';
 
+import { useDispatch } from 'react-redux';
+import { getBook } from '@/store/slices/bookSlice';
+import { ActivityIndicator } from 'react-native';
+
 import Book from '@/components/Book';
+import { BookData } from '@/store/slices/bookSlice';
 
 import HeaderBlack from '@/assets/images/headerBlack.svg';
 import LogoutIcon from '@/assets/icons/logoutIcon.svg';
 import SearchIcon from '@/assets/icons/searchIcon.svg';
 import FilterIcon from '@/assets/icons/filterIcon.svg';
 
+import { useReduxSelector } from '@/hooks/useReduxSelector';
+
 const Home = () => {
+  const { book } = useReduxSelector(state => state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBook());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StyledBackground>
       <StyledHeaderView>
@@ -24,25 +40,15 @@ const Home = () => {
           <FilterIcon />
         </StyledFilterContainer>
       </StyledSearchView>
-      <Book
-        data={{
-          imageUrl: 'https://d2drtqy2ezsot0.cloudfront.net/Book-0.jpg',
-          title: 'A Culpa é das Estrelas',
-          author: 'Jonh Green',
-          pageCount: 150,
-          publisher: 'Intrínseca',
-          published: 2020
-        }}
-      />
-      <Book
-        data={{
-          imageUrl: 'https://d2drtqy2ezsot0.cloudfront.net/Book-0.jpg',
-          title: 'A Culpa é das Estrelas',
-          author: 'Jonh Green',
-          pageCount: 150,
-          publisher: 'Intrínseca',
-          published: 2020
-        }}
+      {book.isLoading && (
+        <StyledActivityIndicator>
+          <ActivityIndicator size='large' color='#AB2680' />
+        </StyledActivityIndicator>
+      )}
+      <StyledList
+        data={book.bookData}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => <Book data={item} />}
       />
     </StyledBackground>
   );
@@ -89,6 +95,13 @@ const StyledSearchText = styled.TextInput`
   font-size: 12px;
   font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
   padding: 14px 0 14px 0;
+`;
+
+const StyledList = styled(FlatList as new (props: FlatListProps<BookData>) => FlatList<BookData>)``;
+
+const StyledActivityIndicator = styled.View`
+  justify-content: center;
+  margin-bottom: 16px;
 `;
 
 export default Home;
