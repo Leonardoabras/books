@@ -20,7 +20,7 @@ const AppStack = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!user.token ? (
+      {user.token ? (
         <Stack.Screen name={AppStackRoutes.AuthStack} component={AuthStack} />
       ) : (
         <Stack.Screen name={AppStackRoutes.MainStack} component={MainStack} />

@@ -65,6 +65,4 @@ const StyledDescriptionText = styled(Text).attrs({
   margin: ${({ margin }) => margin || 0}px 0;
 `;
 
-const StyledActivityIndicator = styled.View``;
-
 export default Book;
