@@ -1,56 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
+
+import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
+
 import Text from '@/components/Text';
+
+import { MainStackParamsList } from '@/routes/stacks/MainStack';
 
 import QuotationIcon from '@/assets/icons/quotationIcon.svg';
 import GobackIcon from '@/assets/icons/gobackIcon.svg';
 
-type BookProps = {
-  data: {
-    imageUrl?: string;
-    title?: string;
-    authors?: string;
-    pageCount?: number;
-    publisher?: string;
-    published?: number;
-    language?: string;
-    isbn10?: string;
-    isbn13?: string;
-    category?: string;
-    description?: string;
-  };
-};
+import { useReduxSelector } from '@/hooks/useReduxSelector';
+import { useReduxDispatch } from '@/hooks/useReduxDispatch';
 
-const DetailBook = ({ navigation }) => {
-  const data = {
-    imageUrl: 'https://d2drtqy2ezsot0.cloudfront.net/Book-0.jpg',
-    title: 'A Culpa é das Estrelas',
-    authors: 'Jonh Green',
-    pageCount: 288,
-    publisher: 'Intrínseca',
-    published: 2022,
-    language: 'Inglês',
-    isbn10: '0062856626',
-    isbn13: '978-0062856623',
-    category: 'Romance',
-    description:
-      'Hazel foi diagnosticada com câncer aos treze anos e agora, aos dezesseis, sobrevive graças a uma droga revolucionária que detém a metástase em seus pulmões. Ela sabe que sua doença é terminal e passa os dias vendo tevê e lendo Uma aflição imperial, livro cujo autor deixou muitas perguntas sem resposta.'
-  };
+import { getDetailBook } from '@/store/slices/bookSlice';
+import { MainStackNavigationProp } from '@/routes/stacks/MainStack';
+
+type DetailBookRouteProp = RouteProp<MainStackParamsList, 'DetailBook'>;
+
+const DetailBook = () => {
+  const dispatch = useReduxDispatch();
+  const { book } = useReduxSelector(state => state);
+
+  const navigation = useNavigation<MainStackNavigationProp>();
+  const route = useRoute<DetailBookRouteProp>();
+
+  useEffect(() => {
+    dispatch(getDetailBook({ id: route.params.bookId }));
+    console.log(route.params.bookId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ScrollView>
-      <StyledGoBack title='Go Back ' onPress={() => navigation.goBack()}>
+      <StyledGoBack onPress={() => navigation.goBack()}>
         <GobackIcon />
       </StyledGoBack>
+      {book.isLoading && (
+        <StyledActivityIndicator>
+          <ActivityIndicator size='large' color='#AB2680' />
+        </StyledActivityIndicator>
+      )}
       <StyledView>
-        <StyledImage source={{ uri: data.imageUrl }} />
+        <StyledImage source={{ uri: book.bookDetailData?.imageUrl }} />
         <StyledBookView>
           <StyledHeaderView>
             <Text font='Heebo_Bold' color='boxSearchColor' size={28}>
-              {data.title}
+              {book.bookDetailData?.title}
             </Text>
-            <Text color='primary'>{data.authors}</Text>
+            <Text color='primary'>{book.bookDetailData?.authors}</Text>
           </StyledHeaderView>
           <StyledInfoView>
             <Text font='Heebo_Bold' color='boxSearchColor'>
@@ -61,14 +62,14 @@ const DetailBook = ({ navigation }) => {
                 {`Páginas\nEditora\nPublicação\nIdioma\nTítulo Original\nISBN-10\nISBN-13\nCategoria`}
               </Text>
               <StyledTitleInfo>
-                <StyledInfoText>{data.pageCount} páginas</StyledInfoText>
-                <StyledInfoText>{data.publisher}</StyledInfoText>
-                <StyledInfoText>{data.published}</StyledInfoText>
-                <StyledInfoText>{data.language}</StyledInfoText>
-                <StyledInfoText>{data.title}</StyledInfoText>
-                <StyledInfoText>{data.isbn10}</StyledInfoText>
-                <StyledInfoText>{data.isbn13}</StyledInfoText>
-                <StyledInfoText>{data.category}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.pageCount} páginas</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.publisher}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.published}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.language}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.title}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.isbn10}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.isbn13}</StyledInfoText>
+                <StyledInfoText>{book.bookDetailData?.category}</StyledInfoText>
               </StyledTitleInfo>
             </StyledBookInfo>
             <StyledDescription>
@@ -78,7 +79,7 @@ const DetailBook = ({ navigation }) => {
               <StyledDescriptionText font='Heebo_Bold' color='grayText'>
                 <QuotationIcon />
                 {'   '}
-                {data.description}
+                {book.bookDetailData?.description}
               </StyledDescriptionText>
             </StyledDescription>
           </StyledInfoView>
@@ -90,6 +91,11 @@ const DetailBook = ({ navigation }) => {
 
 const StyledGoBack = styled.TouchableOpacity`
   margin: 44px 0 0 16px;
+`;
+
+const StyledActivityIndicator = styled.View`
+  justify-content: center;
+  margin-bottom: 16px;
 `;
 
 const StyledView = styled.View`

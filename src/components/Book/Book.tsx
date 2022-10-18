@@ -8,13 +8,15 @@ import { BookData } from '@/store/slices/bookSlice';
 
 type BookProps = {
   data: BookData;
+  onPressDetail?: () => void;
 };
 
 const Book = ({
+  onPressDetail,
   data: { imageUrl, title, authors, pageCount, publisher, published }
 }: BookProps) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPressDetail}>
       <StyledContainer>
         <StyledImage source={{ uri: imageUrl }} />
         <StyledBookView>

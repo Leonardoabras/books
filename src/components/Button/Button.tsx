@@ -1,16 +1,19 @@
 import React from 'react';
 import styled, { css } from 'styled-components/native';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, ButtonProps } from 'react-native';
 
-type ButtonProps = {
+import colors, { ColorType } from '@/config/styles/colors';
+
+type ButtonAddProps = ButtonProps & {
+  color?: keyof ColorType;
   title: string;
   onPress?: () => void;
   showLoading?: boolean;
 };
 
-const Button = ({ title, onPress, showLoading }: ButtonProps) => {
+const Button = ({ title, onPress, showLoading, ...rest }: ButtonAddProps) => {
   return (
-    <StyledLoginButton onPress={onPress}>
+    <StyledLoginButton {...rest} onPress={onPress}>
       <StyledText>{title}</StyledText>
       <StyledActivityIndicator>
         {showLoading && <ActivityIndicator size='small' color='#AB2680' />}
@@ -19,7 +22,7 @@ const Button = ({ title, onPress, showLoading }: ButtonProps) => {
   );
 };
 
-const StyledLoginButton = styled.TouchableOpacity`
+const StyledLoginButton = styled.TouchableOpacity<ButtonAddProps>`
   width: 85px;
   height: 36px;
   align-self: center;
@@ -27,7 +30,7 @@ const StyledLoginButton = styled.TouchableOpacity`
   justify-content: center;
   padding: 8px 20px;
   border-radius: 44px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ color = 'white' }) => colors[color]};
 `;
 
 const StyledText = styled.Text`

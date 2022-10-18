@@ -10,7 +10,7 @@ type InputLoginProps = TextInputProps & {
   title: string;
   showButton?: boolean;
   marginBottom?: number;
-  onSubmit?: () => void;
+  onSubmit?: () => void | string;
   textError?: string;
 };
 
