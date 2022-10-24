@@ -30,7 +30,6 @@ const DetailBook = () => {
 
   useEffect(() => {
     dispatch(getDetailBook({ id: route.params.bookId }));
-    console.log(route.params.bookId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

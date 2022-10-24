@@ -23,7 +23,7 @@ type InitialStateData = {
   bookDetailData: BookDetail | null;
   error: string | null;
   isLoading: boolean;
-  isSelected: boolean;
+  bookCategory?: string[];
 };
 
 const initialState: InitialStateData = {
@@ -31,15 +31,15 @@ const initialState: InitialStateData = {
   bookDetailData: null,
   error: null,
   isLoading: false,
-  isSelected: false
+  bookCategory: []
 };
 
 const bookSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
-    getBook: state => {
-      return { ...state, isLoading: true };
+    getBook: (state, action: PayloadAction<{ bookCategory?: string[] }>) => {
+      return { ...state, bookCategory: action?.payload?.bookCategory, isLoading: true };
     },
     getBookSuccess: (state, action: PayloadAction<{ bookData: BookData[] }>) => {
       return { ...state, bookData: action.payload.bookData, isLoading: false };
@@ -50,9 +50,6 @@ const bookSlice = createSlice({
     getBookDetailSuccess: (state, action: PayloadAction<{ bookDetailData: BookDetail }>) => {
       return { ...state, bookDetailData: action.payload.bookDetailData, isLoading: false };
     },
-    getCategoryBook: state => {
-      return { ...state, isSelected: true };
-    },
     getError: (state, action: PayloadAction<{ error: string }>) => {
       return { ...state, error: action.payload.error, isLoading: false };
     }
@@ -60,13 +57,6 @@ const bookSlice = createSlice({
 });
 
 const { actions, reducer } = bookSlice;
-export const {
-  getBook,
-  getBookSuccess,
-  getDetailBook,
-  getBookDetailSuccess,
-  getCategoryBook,
-  getError
-} = actions;
+export const { getBook, getBookSuccess, getDetailBook, getBookDetailSuccess, getError } = actions;
 
 export default reducer;

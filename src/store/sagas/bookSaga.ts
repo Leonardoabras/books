@@ -14,14 +14,20 @@ import {
   getError
 } from '@/store/slices/bookSlice';
 
-function* getBookData() {
+function* getBookData(action: PayloadAction<{ bookCategory?: string[] }>) {
   try {
-    const response: AxiosResponse<{ data: BookData[] }> = yield call(api.get, `/books?page=2`);
+    const filteredCategory = action?.payload?.bookCategory?.join(`&category=`);
+    const filter = filteredCategory ? `&category=${filteredCategory}` : '';
+
+    const response: AxiosResponse<{ data: BookData[] }> = yield call(
+      api.get,
+      `/books?page=2${filter}`
+    );
     yield put(getBookSuccess({ bookData: response.data.data }));
     //console.log(response.data);
   } catch (error) {
     yield put(getError({ error: error?.response?.data?.errors?.message }));
-    console.log(error?.response?.data?.errors?.message);
+    //console.log(error?.response?.data?.errors?.message);
   }
 }
 
@@ -29,10 +35,9 @@ function* getBookDetail(action: PayloadAction<{ id: string }>) {
   try {
     const response: AxiosResponse<BookDetail> = yield call(api.get, `/books/${action.payload.id}`);
     yield put(getBookDetailSuccess({ bookDetailData: response.data }));
-    console.log(response.data);
   } catch (error) {
     yield put(getError({ error: error?.response?.data?.errors?.message }));
-    console.log(error?.response?.data?.errors?.message);
+    //console.log(error?.response?.data?.errors?.message);
   }
 }
 

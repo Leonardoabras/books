@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, FlatListProps, TouchableOpacity } from 'react-native';
+import { FlatList, FlatListProps } from 'react-native';
 import styled from 'styled-components/native';
-
-import Modal from 'react-native-modal';
 
 import { useDispatch } from 'react-redux';
 import { getBook } from '@/store/slices/bookSlice';
@@ -12,41 +10,17 @@ import { useNavigation } from '@react-navigation/native';
 
 import Book from '@/components/Book';
 import { BookData } from '@/store/slices/bookSlice';
-import Text from '@/components/Text';
-import Button from '@/components/Button';
+
+import ModalFilter from '@/screens/Home/ModalFilter';
 
 import HeaderBlack from '@/assets/images/headerBlack.svg';
 import LogoutIcon from '@/assets/icons/logoutIcon.svg';
 import SearchIcon from '@/assets/icons/searchIcon.svg';
 import FilterIcon from '@/assets/icons/filterIcon.svg';
-import CloseIcon from '@/assets/icons/close.svg';
 
 import { useReduxSelector } from '@/hooks/useReduxSelector';
 
 import { MainStackNavigationProp } from '@/routes/stacks/MainStack';
-
-const categoryData = [
-  'Biografias',
-  'Coleções',
-  'Comportamento',
-  'Contos',
-  'Crítica Literária',
-  'Ficção Científica',
-  'Folclore',
-  'Genealogia',
-  'Humor',
-  'Crianças',
-  'Jogos',
-  'Jornais',
-  'Literatura-Brasileira',
-  'Literatura-Estrangeira',
-  'Livros Raros',
-  'Manuscritos',
-  'Poesia',
-  'Outros-assuntos'
-];
-
-const categoryYear = ['2015', '2016', '2017', '2018', '2019', '2020', '2021'];
 
 const Home = () => {
   const { book } = useReduxSelector(state => state);
@@ -54,6 +28,7 @@ const Home = () => {
 
   const [selected, setSelected] = useState<string[]>([]);
   const [yearSelected, setYearSelected] = useState<string[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation<MainStackNavigationProp>();
 
@@ -98,8 +73,15 @@ const Home = () => {
   }
   console.log(yearSelected);
 
+  function handleModalBook() {
+    // eslint-disable-next-line prettier/prettier
+
+    dispatch(getBook({ bookCategory: selected }));
+    setModalVisible(!modalVisible);
+  }
+
   useEffect(() => {
-    dispatch(getBook());
+    dispatch(getBook({}));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -114,49 +96,18 @@ const Home = () => {
           <StyledSearchText placeholder='Procure um livro' />
           <SearchIcon />
         </StyledInputView>
-        <StyledFilterContainer>
+        <StyledFilterContainer onPress={() => setModalVisible(true)}>
           <FilterIcon />
           <StyledModalView>
-            <Modal isVisible={true}>
-              <StyledModal>
-                <StyledCloseIconView>
-                  <CloseIcon />
-                </StyledCloseIconView>
-                <StyledContentView>
-                  <StyledTitleView>
-                    <Text color='boxSearchColor' font='Heebo_Bold'>
-                      Selecione a categoria
-                    </Text>
-                  </StyledTitleView>
-                  <StyledOptionsView>
-                    {categoryData.map((item, index) => (
-                      <TouchableOpacity onPress={() => handleCategoryFilter(item)}>
-                        <StyledOptionsText key={index} isSelected={selected.includes(item)}>
-                          {item}
-                        </StyledOptionsText>
-                      </TouchableOpacity>
-                    ))}
-                  </StyledOptionsView>
-                  <StyledYearTitleView>
-                    <Text color='boxSearchColor' font='Heebo_Bold'>
-                      Selecione o Ano
-                    </Text>
-                  </StyledYearTitleView>
-                  <StyledOptionsView>
-                    {categoryYear.map((item, index) => (
-                      <TouchableOpacity onPress={() => handleYearFilter(item)}>
-                        <StyledOptionsText key={index} isSelected={yearSelected.includes(item)}>
-                          {item}
-                        </StyledOptionsText>
-                      </TouchableOpacity>
-                    ))}
-                  </StyledOptionsView>
-                  <StyledButtonView>
-                    <StyledButton title='Filtrar' />
-                  </StyledButtonView>
-                </StyledContentView>
-              </StyledModal>
-            </Modal>
+            <ModalFilter
+              onFilterCategory={handleCategoryFilter}
+              onFilterYear={handleYearFilter}
+              selectedCategory={selected}
+              selectedYear={yearSelected}
+              modalVisible={modalVisible}
+              onCloseModal={() => setModalVisible(!modalVisible)}
+              onSubmitCategory={handleModalBook}
+            />
           </StyledModalView>
         </StyledFilterContainer>
       </StyledSearchView>
@@ -214,56 +165,6 @@ const StyledFilterContainer = styled.TouchableOpacity`
 `;
 
 const StyledModalView = styled.View``;
-
-const StyledModal = styled.ScrollView`
-  height: 700px;
-  margin: 50px 16px;
-  border: 1px;
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
-const StyledCloseIconView = styled.View`
-  margin: 16px 16px 2px;
-  align-items: flex-end;
-`;
-
-const StyledContentView = styled.View`
-  margin-left: 16px;
-`;
-
-const StyledTitleView = styled.View``;
-
-const StyledOptionsText = styled(Text)<{ isSelected: boolean }>`
-  padding: 6px 16px;
-  margin: 14px 8px 0 0;
-  border: 1px;
-  border-radius: 44px;
-  border-color: ${({ theme }) => theme.colors.boxSearchColor};
-  background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.boxSearchColor : theme.colors.white};
-  color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.white : theme.colors.boxSearchColor};
-`;
-
-const StyledYearTitleView = styled.View`
-  margin-top: 37px;
-`;
-
-const StyledOptionsView = styled.View`
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
-const StyledButtonView = styled.View`
-  flex: 1;
-  padding: 48px 0 24px 0;
-`;
-
-const StyledButton = styled(Button).attrs({})`
-  border: 1px;
-  border-color: ${({ theme }) => theme.colors.primary};
-`;
 
 const StyledSearchText = styled.TextInput`
   font-size: 12px;
