@@ -11,6 +11,15 @@ type BookProps = {
   onPressDetail?: () => void;
 };
 
+const myArray = [
+  'Leonardo Abras de Almeida',
+  'Samuel Oliveira dos Santos',
+  'Rafael Motoqueiro',
+  'Pablo Escobar',
+  'Juan Martines',
+  'Franscico Menezes de La Puerta'
+];
+
 const Book = ({
   onPressDetail,
   data: { imageUrl, title, authors, pageCount, publisher, published }
@@ -24,7 +33,14 @@ const Book = ({
             <Text font='Heebo_Bold' size={14}>
               {title}
             </Text>
-            <Text color='primary'>{authors}</Text>
+            <StyledAuthors>
+              {authors.map((author, index) => (
+                <Text color='primary'>
+                  {`${author}`}
+                  {authors.length - 1 !== index && ', '}
+                </Text>
+              ))}
+            </StyledAuthors>
           </StyledHeaderView>
           <StyledDescriptionView>
             <StyledDescriptionText>{pageCount} páginas</StyledDescriptionText>
@@ -39,6 +55,7 @@ const Book = ({
 
 const StyledContainer = styled.View`
   padding: 16px;
+
   flex-direction: row;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 4px;
@@ -56,6 +73,11 @@ const StyledBookView = styled.View`
 `;
 
 const StyledHeaderView = styled.View``;
+
+const StyledAuthors = styled.View`
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
 
 const StyledDescriptionView = styled.View`
   padding-top: 25px;

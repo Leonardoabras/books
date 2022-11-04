@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 
 import { useDispatch } from 'react-redux';
 import { getBook } from '@/store/slices/bookSlice';
+import { requestLogout } from '@/store/slices/userSlice';
 import { ActivityIndicator } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -29,6 +30,7 @@ const Home = () => {
   const [selected, setSelected] = useState<string[]>([]);
   const [yearSelected, setYearSelected] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [title, setTitle] = useState('');
 
   const navigation = useNavigation<MainStackNavigationProp>();
 
@@ -49,29 +51,16 @@ const Home = () => {
 
   function handleCategoryFilter(name: string) {
     setFilterState(name, setSelected);
-    // setSelected(oldState => {
-    //   const categoryIndex = oldState.findIndex(category => category === name);
-
-    //   if (categoryIndex >= 0) {
-    //     return oldState.filter(category => category !== name);
-    //   }
-    //   return [...oldState, name];
-    // });
   }
-  console.log(selected);
+
   function handleYearFilter(year: string) {
     setFilterState(year, setYearSelected);
-    // setYearSelected(oldState => {
-    //   const yearIndex = oldState.findIndex(category => category === year);
-    //   console.log(yearIndex);
-
-    //   if (yearIndex >= 0) {
-    //     return oldState.filter(category => category !== year);
-    //   }
-    //   return [...oldState, year];
-    // });
   }
-  console.log(yearSelected);
+
+  function handleSearchBook() {
+    console.log(title);
+    dispatch(getBook({ searchBook: title }));
+  }
 
   function handleModalBook() {
     // eslint-disable-next-line prettier/prettier
@@ -80,8 +69,12 @@ const Home = () => {
     setModalVisible(!modalVisible);
   }
 
+  function handleLogoutUser() {
+    dispatch(requestLogout());
+  }
+
   useEffect(() => {
-    dispatch(getBook({}));
+    dispatch(getBook());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,12 +82,16 @@ const Home = () => {
     <StyledBackground>
       <StyledHeaderView>
         <HeaderBlack />
-        <LogoutIcon />
+        <StyledLogoutView onPress={handleLogoutUser}>
+          <LogoutIcon />
+        </StyledLogoutView>
       </StyledHeaderView>
       <StyledSearchView>
         <StyledInputView>
-          <StyledSearchText placeholder='Procure um livro' />
-          <SearchIcon />
+          <StyledSearchText placeholder='Procure um livro' value={title} onChangeText={setTitle} />
+          <StyledIconView onPress={handleSearchBook}>
+            <SearchIcon />
+          </StyledIconView>
         </StyledInputView>
         <StyledFilterContainer onPress={() => setModalVisible(true)}>
           <FilterIcon />
@@ -141,6 +138,8 @@ const StyledHeaderView = styled.View`
   align-items: center;
 `;
 
+const StyledLogoutView = styled.TouchableOpacity``;
+
 const StyledInputView = styled.View`
   width: 320px;
   height: 48px;
@@ -171,6 +170,8 @@ const StyledSearchText = styled.TextInput`
   font-family: ${({ theme }) => theme.fonts.Heebo_Regular};
   padding: 14px 0 14px 0;
 `;
+
+const StyledIconView = styled.TouchableOpacity``;
 
 const StyledList = styled(FlatList as new (props: FlatListProps<BookData>) => FlatList<BookData>)``;
 

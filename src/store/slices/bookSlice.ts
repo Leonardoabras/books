@@ -38,8 +38,15 @@ const bookSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
-    getBook: (state, action: PayloadAction<{ bookCategory?: string[] }>) => {
-      return { ...state, bookCategory: action?.payload?.bookCategory, isLoading: true };
+    getBook: (
+      state,
+      action: PayloadAction<{ bookCategory?: string[]; searchBook?: string } | undefined>
+    ) => {
+      return {
+        ...state,
+        bookCategory: action?.payload?.bookCategory,
+        isLoading: true
+      };
     },
     getBookSuccess: (state, action: PayloadAction<{ bookData: BookData[] }>) => {
       return { ...state, bookData: action.payload.bookData, isLoading: false };

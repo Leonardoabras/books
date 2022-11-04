@@ -34,12 +34,29 @@ const userSlice = createSlice({
     },
     getLoginError: (state, action: PayloadAction<{ loginError: string }>) => {
       return { ...state, isLoading: false, loginError: action.payload.loginError };
+    },
+    requestLogout: state => {
+      return { ...state };
+    },
+    logoutError: state => {
+      return { ...state, loginError: 'Não foi possível deslogar, tente novamente depois' };
+    },
+    logoutSuccess: state => {
+      return { ...state, token: null };
     }
   }
 });
 
 const { actions, reducer } = userSlice;
 
-export const { getToken, getUser, getTokenSuccess, getLoginError } = actions;
+export const {
+  getToken,
+  getUser,
+  getTokenSuccess,
+  getLoginError,
+  requestLogout,
+  logoutError,
+  logoutSuccess
+} = actions;
 
 export default reducer;

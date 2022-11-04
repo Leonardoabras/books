@@ -50,7 +50,12 @@ const DetailBook = () => {
             <Text font='Heebo_Bold' color='boxSearchColor' size={28}>
               {book.bookDetailData?.title}
             </Text>
-            <Text color='primary'>{book.bookDetailData?.authors}</Text>
+            {book.bookDetailData?.authors.map((author, index) => (
+              <Text color='primary'>
+                {`${author}`}
+                {book?.bookDetailData?.authors?.length - 1 !== index && ', '}
+              </Text>
+            ))}
           </StyledHeaderView>
           <StyledInfoView>
             <Text font='Heebo_Bold' color='boxSearchColor'>

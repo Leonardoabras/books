@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-import { TouchableOpacity, Modal } from 'react-native';
+import { TouchableOpacity, Dimensions } from 'react-native';
 
 import CloseIcon from '@/assets/icons/close.svg';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
+
+const { width } = Dimensions.get('screen');
 
 const category = [
   {
@@ -100,7 +102,22 @@ const category = [
   }
 ];
 
-const categoryYear = ['2015', '2016', '2017', '2018', '2019', '2020', '2021'];
+const categoryYear = [
+  '2015',
+  '2016',
+  '2017',
+  '2018',
+  '2019',
+  '2020',
+  '2021',
+  '2015',
+  '2016',
+  '2017',
+  '2018',
+  '2019',
+  '2020',
+  '2021'
+];
 
 type FilterCategoryProps = {
   onFilterCategory: (item: string) => void;
@@ -122,13 +139,13 @@ const ModalFilter = ({
   onSubmitCategory
 }: FilterCategoryProps) => {
   return (
-    <>
-      <Modal visible={modalVisible} transparent={true}>
+    <StyledModalView animationType='fade' visible={modalVisible} transparent={true}>
+      <StyledModalContentContainer>
         <StyledModal>
           <StyledCloseIconView onPress={onCloseModal}>
             <CloseIcon />
           </StyledCloseIconView>
-          <StyledContentView>
+          <StyledContentView showsVerticalScrollIndicator={false}>
             <StyledTitleView>
               <Text color='boxSearchColor' font='Heebo_Bold'>
                 Selecione a categoria
@@ -160,30 +177,38 @@ const ModalFilter = ({
                 </TouchableOpacity>
               ))}
             </StyledOptionsView>
-            <StyledButtonView>
-              <StyledButton title='Filtrar' onPress={onSubmitCategory} />
-            </StyledButtonView>
           </StyledContentView>
+          <StyledButtonView>
+            <StyledButton title='Filtrar' onPress={onSubmitCategory} />
+          </StyledButtonView>
         </StyledModal>
-      </Modal>
-    </>
+        <StyledShadow onPress={onCloseModal} />
+      </StyledModalContentContainer>
+    </StyledModalView>
   );
 };
 
-const StyledModal = styled.ScrollView`
-  height: 700px;
-  margin: 50px 16px;
-  border: 1px;
+const StyledModalView = styled.Modal``;
+
+const StyledModalContentContainer = styled.View`
+  flex: 1;
+  padding: 0 16px;
+  justify-content: center;
+`;
+
+const StyledModal = styled.View`
+  height: 70%;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.white};
+  z-index: 2;
 `;
 
 const StyledCloseIconView = styled.TouchableOpacity`
   margin: 16px 16px 2px;
-  align-items: flex-end;
+  align-self: flex-end;
 `;
 
-const StyledContentView = styled.View`
+const StyledContentView = styled.ScrollView`
   margin-left: 16px;
 `;
 
@@ -211,13 +236,19 @@ const StyledOptionsView = styled.View`
 `;
 
 const StyledButtonView = styled.View`
-  flex: 1;
-  padding: 48px 0 24px 0;
+  padding: 16px;
 `;
 
 const StyledButton = styled(Button).attrs({})`
   border: 1px;
   border-color: ${({ theme }) => theme.colors.primary};
+`;
+
+const StyledShadow = styled.TouchableOpacity`
+  position: absolute;
+  width: ${width}px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 export default ModalFilter;

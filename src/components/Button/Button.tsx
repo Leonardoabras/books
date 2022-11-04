@@ -28,7 +28,7 @@ const StyledLoginButton = styled.TouchableOpacity<ButtonAddProps>`
   align-self: center;
   align-items: center;
   justify-content: center;
-  padding: 8px 20px;
+  padding: 0 18px;
   border-radius: 44px;
   background-color: ${({ color = 'white' }) => colors[color]};
 `;
@@ -45,4 +45,5 @@ const StyledText = styled.Text`
 `;
 
 const StyledActivityIndicator = styled.View``;
+
 export default Button;
